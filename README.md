@@ -4,6 +4,28 @@
 
 This project is an AI-powered coding agent that explores a Node.js repository, analyzes the codebase, creates an execution plan, and generates code modification suggestions using an LLM.
 
+## Architecture
+
+                User Request
+                     │
+                     ▼
+          +--------------------+
+          |     agent.py       |
+          | (Main Controller)  |
+          +--------------------+
+                     │
+     ┌───────────────┼───────────────┐
+     ▼               ▼               ▼
++------------+  +------------+  +-------------+
+| explorer.py|  | planner.py |  | modifier.py |
++------------+  +------------+  +-------------+
+     │               │               │
+     └───────────────┼───────────────┘
+                     ▼
+        +---------------------------+
+        | generated_changes/*.md    |
+        +---------------------------+
+
 ## Features
 
 - Repository exploration
