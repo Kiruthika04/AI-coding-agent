@@ -80,6 +80,21 @@ python agent.py
 5. Generate AI-powered code suggestions.
 6. Save suggestions to the `generated_changes` folder.
 
+## Repository Exploration
+
+The repository is explored using Python's `os.walk()` function.
+
+The explorer:
+
+- Traverses the project directory.
+- Ignores unnecessary folders such as:
+  - node_modules
+  - .git
+  - __pycache__
+  - venv
+- Collects all relevant project files.
+- Provides the file list to the planner so the LLM only refers to existing files instead of inventing new ones.
+
 ## Assumptions
 
 - The repository is a Node.js application.
