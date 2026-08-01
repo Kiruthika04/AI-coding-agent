@@ -6,25 +6,27 @@ This project is an AI-powered coding agent that explores a Node.js repository, a
 
 ## Architecture
 
+```text
                 User Request
                      │
                      ▼
-          +--------------------+
-          |     agent.py       |
-          | (Main Controller)  |
-          +--------------------+
+            +----------------+
+            |    agent.py    |
+            | Main Controller|
+            +----------------+
                      │
      ┌───────────────┼───────────────┐
      ▼               ▼               ▼
 +------------+  +------------+  +-------------+
 | explorer.py|  | planner.py |  | modifier.py |
 +------------+  +------------+  +-------------+
-     │               │               │
-     └───────────────┼───────────────┘
-                     ▼
-        +---------------------------+
-        | generated_changes/*.md    |
-        +---------------------------+
+        │             │               │
+        └─────────────┼───────────────┘
+                      ▼
+       +-------------------------------+
+       | generated_changes/*.md        |
+       +-------------------------------+
+```
 
 ## Features
 
@@ -71,35 +73,73 @@ MODEL_NAME=qwen/qwen3-coder
 python agent.py
 ```
 
-## Workflow
+## Agent Workflow
 
-1. Explore the repository.
-2. Analyze the repository structure.
-3. Generate an execution plan.
-4. Identify relevant files.
-5. Generate AI-powered code suggestions.
-6. Save suggestions to the `generated_changes` folder.
+1. User provides a feature request.
+
+2. explorer.py scans the repository and collects relevant source files.
+
+3. planner.py creates an implementation plan using the LLM.
+
+4. modifier.py analyzes important files individually and generates code suggestions.
+
+5. Suggestions are saved into the generated_changes folder as Markdown files.
+
+6. agent.py orchestrates the complete workflow.
 
 ## Repository Exploration
 
-The repository is explored using Python's `os.walk()` function.
+The repository is explored using Python's `os.walk()`.
 
 The explorer:
 
-- Traverses the project directory.
-- Ignores unnecessary folders such as:
+- Recursively scans the project directory
+- Ignores unnecessary folders:
   - node_modules
   - .git
   - __pycache__
   - venv
-- Collects all relevant project files.
-- Provides the file list to the planner so the LLM only refers to existing files instead of inventing new ones.
+- Collects relevant source files
+- Passes the file list to the planner so the LLM only analyzes existing project files.
 
 ## Assumptions
 
 - The repository is a Node.js application.
 - The LLM has sufficient context to analyze individual files.
 - Suggested changes are reviewed before being applied.
+
+## Assumptions
+
+- The repository follows a standard project structure.
+- The user request is clear and specific.
+- The LLM has enough context to analyze individual files.
+
+## Trade-offs
+
+- The agent generates suggestions instead of automatically editing files.
+- File analysis is performed one file at a time to reduce prompt size.
+- Generated changes should be reviewed before applying.
+
+## Example Output
+
+The generated suggestions are saved inside:
+
+generated_changes/
+
+Example:
+
+generated_changes/
+├── note.controller.md
+├── note.model.md
+└── note.routes.md
+
+## Technologies
+
+- Python
+- OpenRouter API
+- Qwen Coder Model
+- dotenv
+- pathlib
 
 ## Future Improvements
 
